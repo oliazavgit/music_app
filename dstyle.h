@@ -7,8 +7,8 @@
 class dStyle : public QDialog, private Ui::dStyle
 {
     Q_OBJECT
-    QString sDBAlias;                                                           ///<Идентификатор доступа к БД
-    QString sId;                                                                ///<Идентификатор записи
+    QString sDBAlias;                                                           // Идентификатор доступа к БД
+    QString sId;                                                                // Идентификатор записи
 public:
     explicit dStyle(QString ALIAS, QString ID = "", QWidget *parent = 0);
 private slots:

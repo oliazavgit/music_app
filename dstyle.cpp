@@ -2,7 +2,7 @@
 #include <QtSql>
 #include <QMessageBox>
 //----------------------------------------------------------
-dStyle::dStyle(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)     //выводим всё
+dStyle::dStyle(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)     // выводим всё
 {
     setupUi(this);
     sDBAlias = ALIAS;
@@ -20,7 +20,7 @@ dStyle::dStyle(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)    
     }
 }
 //----------------------------------------------------------
-void dStyle::on_pbOk_clicked()                                                  //кнопка Ок
+void dStyle::on_pbOk_clicked()                                                  // кнопка "Ок"
 {
     if(leName->text().isEmpty())
     {
@@ -29,11 +29,11 @@ void dStyle::on_pbOk_clicked()                                                  
         return;
     }
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
-    if(sId.isEmpty())                                                           //добавляем стиль
+    if(sId.isEmpty())                                                           // добавляем стиль
     {
         QString sSql = "SELECT ID_style FROM styles WHERE title='%1'";
         q.exec(sSql.arg(leName->text()));
-        if(q.next())                                                            //если идентичное есть
+        if(q.next())                                                            // если идентичное есть
         {
             QMessageBox::question(this, " ", tr("Такая запись уже есть."), QMessageBox::Ok);
             leName->clear();
@@ -46,7 +46,7 @@ void dStyle::on_pbOk_clicked()                                                  
         q.exec(sSql.arg(leName->text()).arg(leAbout->text()));
     }
     else
-    {   QString sSql = "SELECT ID_style FROM styles WHERE title='%1' AND ID_style<>%2"; //изменяем стиль
+    {   QString sSql = "SELECT ID_style FROM styles WHERE title='%1' AND ID_style<>%2"; // изменяем стиль
         q.exec(sSql.arg(leName->text()).arg(sId));
         if(q.next())
         {

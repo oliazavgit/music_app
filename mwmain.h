@@ -8,12 +8,12 @@
 class mwMain : public QWidget, private Ui::mwMain
 {
     Q_OBJECT
-    QString sDBHost;                                                            //IP адрес компьютера с БД
-    QString sDBName;                                                            //Имя БД
-    QString sDBUser;                                                            //Имя пользователя БД
-    QString sDBPass;                                                            //Пароль пользователя БД
-    int iDBPort;                                                                //Порт доступа к БД
-    QString sDBAlias;                                                           //Идентификатор доступа к БД
+    QString sDBHost;                                                            // IP адрес компьютера с БД
+    QString sDBName;                                                            // Имя БД
+    QString sDBUser;                                                            // Имя пользователя БД
+    QString sDBPass;                                                            // Пароль пользователя БД
+    int iDBPort;                                                                // Порт доступа к БД
+    QString sDBAlias;                                                           // Идентификатор доступа к БД
     QString sIdUser;
     QSqlDatabase dbMuz;
     QMediaPlayer *player;

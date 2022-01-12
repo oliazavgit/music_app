@@ -6,7 +6,8 @@
 //----------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    QStringList paths = QCoreApplication::libraryPaths();                       //прописываем путь к плагинам
+    QStringList paths = QCoreApplication::libraryPaths();                       // путь к плагинам
+	
     paths.append(".");
     paths.append("plugins");
     paths.append("plugins/translations");
@@ -18,11 +19,11 @@ int main(int argc, char *argv[])
     paths.append("plugins/imports");
 //    paths.append("plugins/playlistformats");
 #endif
-    QCoreApplication::setLibraryPaths(paths);                                   //к стандартной бибиотеке добавляем свои
+    QCoreApplication::setLibraryPaths(paths);                                   // к стандартной бибиотеке добавляем свои библиотеки
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     QApplication a(argc, argv);
-    QTranslator *translator = new QTranslator(&a);                              // устанавливаем руссификатор
+    QTranslator *translator = new QTranslator(&a);                              // руссификатор
     if(translator->load("qt_ru", QDir::toNativeSeparators(a.applicationDirPath()+"/translations")))
          a.installTranslator(translator);
     mwMain w;

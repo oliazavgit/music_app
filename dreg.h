@@ -6,7 +6,7 @@
 class dReg : public QDialog, private Ui::dReg
 {
     Q_OBJECT
-    QString sDBAlias;                                                           //<Идентификатор доступа к БД
+    QString sDBAlias;                                                           // Идентификатор доступа к БД
 public:
     explicit dReg(QString ALIAS, QWidget *parent = 0);
 private slots:

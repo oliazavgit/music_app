@@ -15,8 +15,8 @@ mwMain::mwMain(QWidget *parent) :  QWidget(parent)
     sDBAlias = "MUZDB";
     sIdUser  = "";
 
-    QString sIniPath = QString("%1/pkserver.ini").arg(QApplication::applicationDirPath()); //текущее приложение и там ini
-    QSettings setting(sIniPath, QSettings::IniFormat, nullptr);                 //родительского нет, формат ini,путь ранее указали
+    QString sIniPath = QString("%1/pkserver.ini").arg(QApplication::applicationDirPath()); // ini файл с настройками
+    QSettings setting(sIniPath, QSettings::IniFormat, nullptr);                 		   
     sDBHost = setting.value("DBHost").toString();
     iDBPort = setting.value("DBPort").toInt();
     sDBName = setting.value("DBName").toString();
@@ -30,7 +30,7 @@ mwMain::mwMain(QWidget *parent) :  QWidget(parent)
     dbMuz.setUserName(sDBUser);
     dbMuz.setPassword(sDBPass);
 
-    twExec->hideColumn(0);                                                      //скрываем служебные столбцы списка
+    twExec->hideColumn(0);                                                         		// скрываем служебные столбцы списка
     twStyle->hideColumn(0);
     twTrack->hideColumn(0);
     twTrackPlay->hideColumn(0);
@@ -38,7 +38,7 @@ mwMain::mwMain(QWidget *parent) :  QWidget(parent)
     twTrackPlay->hideColumn(4);
     twTrackFav->hideColumn(4);
                     //----------------------------------------------------------
-    pbPlay->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaPlay)); //стандартные иконки
+    pbPlay->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaPlay)); 		// стандартные иконки
     pbStop->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
 
     pbAbout->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileLinkIcon));
@@ -50,21 +50,21 @@ mwMain::mwMain(QWidget *parent) :  QWidget(parent)
     pbReg->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogYesButton));
 
                     //----------------------------------------------------------
-    player = new QMediaPlayer(this);                                            //создаем плеер
+    player = new QMediaPlayer(this);                                            		// создание плеера
     if(player)
     {
         player->setVolume(100);
-        connect(pbStop, SIGNAL(clicked(bool)), player, SLOT(stop()));           //событие стоп
-        connect(dVollume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));//событие громкости
-        connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(my_viewPos(qint64)));//событие изменение позиции
-        connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(my_viewSize(qint64)));//событие размера
+        connect(pbStop, SIGNAL(clicked(bool)), player, SLOT(stop()));           			// событие стоп
+        connect(dVollume, SIGNAL(valueChanged(int)), player, SLOT(setVolume(int)));			// событие громкости
+        connect(player, SIGNAL(positionChanged(qint64)), this, SLOT(my_viewPos(qint64)));	// событие изменение позиции
+        connect(player, SIGNAL(durationChanged(qint64)), this, SLOT(my_viewSize(qint64)));	// событие размера
     }
                     //----------------------------------------------------------
     swMain->setCurrentWidget(pLoad);
     iTimerId = startTimer(100);
 }
 //----------------------------------------------------------
-mwMain::~mwMain()                                                               //убили плеер
+mwMain::~mwMain()                                                               // удаление плеера
 {
     if(player)
     {
@@ -72,11 +72,11 @@ mwMain::~mwMain()                                                               
         player = nullptr;
     }
 }
-//----------------------------------------------------------                    //соединение с БД
+//----------------------------------------------------------                    // соединение с БД
 void mwMain::my_connectDb()
 {
     bool bOpen = dbMuz.open();
-    if(bOpen)                                                                   //если открылось
+    if(bOpen)                                                                  
     {
         swMain->setCurrentWidget(pLogin);
         leLogin->setFocus();
@@ -84,7 +84,7 @@ void mwMain::my_connectDb()
     else
         swMain->setCurrentWidget(pMsg);
 }
-//----------------------------------------------------------                    //таймер
+//----------------------------------------------------------                    // таймер на открытие БД
 void mwMain::timerEvent(QTimerEvent *)
 {
     killTimer(iTimerId);
@@ -92,12 +92,12 @@ void mwMain::timerEvent(QTimerEvent *)
 }
 //----------------------------------------------------------
 //заполнение у пользователя
-//----------------------------------------------------------                    //комбобоксы
-void mwMain::my_update()                                                        //заполнение у пользователя
+//----------------------------------------------------------                    
+void mwMain::my_update()                                                        
 {
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
 
-    q.exec("SELECT * FROM executor");                                           //заполнение выбора исполнителя у пользователя
+    q.exec("SELECT * FROM executor");                                           // заполнение выбора исполнителя у пользователя
     cbTrExec->clear();
     while(q.next())
     {
@@ -108,7 +108,7 @@ void mwMain::my_update()                                                        
     }
     cbTrExec->setCurrentIndex(-1);
 
-    q.exec("SELECT * FROM styles");                                             //заполнение выбора стиля у пользователя
+    q.exec("SELECT * FROM styles");                                             // заполнение выбора стиля у пользователя
     cbTrStyle->clear();
     while(q.next())
     {
@@ -117,7 +117,7 @@ void mwMain::my_update()                                                        
     cbTrStyle->setCurrentIndex(-1);
 }
 //----------------------------------------------------------
-void mwMain::setTrackFav()                                                      //понравившихся треков пользователя
+void mwMain::setTrackFav()                                                      // заполнение понравившихся треков пользователя
 {
     twTrackFav->clear();
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
@@ -143,7 +143,7 @@ void mwMain::setTrackFav()                                                      
     }
 }
 //----------------------------------------------------------
-void mwMain::setTrackPlay()                                                     //заполнение треками + организация поиска
+void mwMain::setTrackPlay()                                                     // заполнение треками + организация поиска
 {
     twTrackPlay->clear();
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
@@ -174,12 +174,12 @@ void mwMain::setTrackPlay()                                                     
     }
 }
 //----------------------------------------------------------
-void mwMain::on_pbTrFind_clicked()                                              //кнопка поиска
+void mwMain::on_pbTrFind_clicked()                                              // кнопка поиска
 {
     setTrackPlay();
 }
 //----------------------------------------------------------
-void mwMain::on_pbTrClear_clicked()                                             //кнопка отчистки поиска
+void mwMain::on_pbTrClear_clicked()                                             // кнопка отчистки поиска
 {
     leTrName->clear();
     cbTrExec->setCurrentIndex(-1);
@@ -195,7 +195,7 @@ void mwMain::on_pbAddFav_clicked()                                              
                      "FROM favorites "
                      "WHERE  ID_user=%1 AND ID_track=%2 ";
     q.exec(strSql.arg(sIdUser).arg(twTrackPlay->selectedItems().at(0)->text(0)));
-    if(q.next())                                                                //если на существующую
+    if(q.next())                                                               
         QMessageBox::question(this, " ", tr("Такая запись уже есть."), QMessageBox::Ok);
     else
     {
@@ -204,7 +204,7 @@ void mwMain::on_pbAddFav_clicked()                                              
     }
     setTrackFav();
 }
-//----------------------------------------------------------                    //удалить из понравившегося
+//----------------------------------------------------------                    // удалить из понравившегося
 void mwMain::on_pbDelFav_clicked()
 {
     if(twTrackFav->selectedItems().count())
@@ -218,45 +218,45 @@ void mwMain::on_pbDelFav_clicked()
         }
     }
 }
-//----------------------------------------------------------                    //даблклик из обычного - прослушивание
+//----------------------------------------------------------                    // даблклик из обычного -> прослушивание
 void mwMain::on_twTrackPlay_itemDoubleClicked(QTreeWidgetItem *, int)
 {
     if(player &&
             twTrackPlay->selectedItems().count())
     {
         player->setMedia(QUrl::fromLocalFile(twTrackPlay->selectedItems().at(0)->text(4)));
-        hsTrack->setValue(0);                                                  //ползунок
+        hsTrack->setValue(0);                                                  // ползунок
         player->play();
     }
 }
-//----------------------------------------------------------                    //даблкник в понравивщемся
+//----------------------------------------------------------                    // даблкник в понравивщемся
 void mwMain::on_twTrackFav_itemDoubleClicked(QTreeWidgetItem *, int )
 {
-    if(twTrackFav->selectedItems().count())                                     //если выбрано даблклик
+    if(twTrackFav->selectedItems().count())                                     // если выбрано даблклик -> прослушивание
         pbPlay->click();
 }
-//----------------------------------------------------------                    //прослушать трек
+//----------------------------------------------------------                  
 void mwMain::on_pbPlay_clicked()
 {
     if(player &&
             twTrackFav->selectedItems().count())
     {
         player->setMedia(QUrl::fromLocalFile(twTrackFav->selectedItems().at(0)->text(4)));
-        hsTrack->setValue(0);                                                  //ползунок
+        hsTrack->setValue(0);                                              
         player->play();
     }
 }
 //----------------------------------------------------------
-void mwMain::my_viewPos(qint64 pos)                                             //изменение позиции
+void mwMain::my_viewPos(qint64 pos)                                             // изменение позиции ползунка
 {
-    hsTrack->setValue(int(pos/1000));                                           //миллисекунды в секунды
+    hsTrack->setValue(int(pos/1000));                                           // перевод миллисекунд в секунды
 }
 //----------------------------------------------------------
-void mwMain::my_viewSize(qint64 dur)                                            //размер трека
+void mwMain::my_viewSize(qint64 dur)                                            // размер трека
 {
     hsTrack->setMaximum(int(dur/1000));
 }
-//----------------------------------------------------------                    //передвижение трека звучания
+//----------------------------------------------------------                    // передвижение звучания
 void mwMain::on_hsTrack_sliderReleased()
 {
     player->setPosition(hsTrack->value()*1000);
@@ -264,7 +264,7 @@ void mwMain::on_hsTrack_sliderReleased()
 //----------------------------------------------------------
 //шапка
 //----------------------------------------------------------
-void mwMain::on_pbAbout_clicked()                                               //о программе
+void mwMain::on_pbAbout_clicked()                                               // о программе
 {
     dAbout *dialog = new dAbout(this);
     if(dialog)
@@ -274,13 +274,13 @@ void mwMain::on_pbAbout_clicked()                                               
     }
 }
 //----------------------------------------------------------
-void mwMain::on_pbUser_clicked()                                                //сменить пользователя
+void mwMain::on_pbUser_clicked()                                                // сменить пользователя
 {
     if(QMessageBox::question(this, " ", tr("Вы уверены, что хотите выйти из учетной записи?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
     {
         if (player)
-            pbStop->click();                                                    //остановить плеер
-        pbTrClear->click();                                                     //отчистить выборку
+            pbStop->click();                                                    // остановить плеер
+        pbTrClear->click();                                                     // отчистить выборку
         swMain->setCurrentWidget(pLogin);
         leLogin->clear();
         lePass->clear();
@@ -288,7 +288,7 @@ void mwMain::on_pbUser_clicked()                                                
     }
 }
 //----------------------------------------------------------
-void mwMain::on_pbClose_clicked()                                               //кнопка Выход
+void mwMain::on_pbClose_clicked()                                               // кнопка "Выход"
 {
     if(QMessageBox::question(this, " ", tr("Завершить работу программы?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
         close();
@@ -296,7 +296,7 @@ void mwMain::on_pbClose_clicked()                                               
 //----------------------------------------------------------
 //начальное окно регистрации
 //----------------------------------------------------------
-void mwMain::on_pbLogin_clicked()                                               //кнопка Вход
+void mwMain::on_pbLogin_clicked()                                               // кнопка "Вход"
 {
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
     QString sSql = "SELECT * FROM users WHERE login='%1' AND password='%2'";
@@ -305,14 +305,14 @@ void mwMain::on_pbLogin_clicked()                                               
     {
         sIdUser = q.value("ID_user").toString();
         lLogin->setText(q.value("login").toString());
-        if(q.value("login").toString() == "admin")                              //если admin admin
+        if(q.value("login").toString() == "admin")                              // если admin admin
         {
             swMain->setCurrentWidget(pAdmin);
             setExec();
             setStyle();
             setTrack();
         }
-        else                                                                    //если любо пользователь
+        else                                                                    // если любо пользователь, но не admin admin
         {
             swMain->setCurrentWidget(pUser);
             setTrackPlay();
@@ -328,13 +328,13 @@ void mwMain::on_pbLogin_clicked()                                               
         leLogin->setFocus();
     }
 }
-//----------------------------------------------------------                    //ентер чтобы войти
+//----------------------------------------------------------                    // Enter
 void mwMain::on_lePass_returnPressed()
 {
     pbLogin->click();
 }
 //----------------------------------------------------------
-void mwMain::on_pbReg_clicked()                                                 //кнопка зарегистироваться
+void mwMain::on_pbReg_clicked()                                                 // кнопка "Зарегистироваться"
 {
     dReg *dialog = new dReg(sDBAlias, this);
     if(dialog)
@@ -349,7 +349,7 @@ void mwMain::on_pbReg_clicked()                                                 
 //----------------------------------------------------------
 //заполнение от лица администратора
 //----------------------------------------------------------
-void mwMain::setExec()                                                          //заполнение исполнителей
+void mwMain::setExec()                                                          // заполнение исполнителей
 {
     twExec->clear();
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
@@ -369,7 +369,7 @@ void mwMain::setExec()                                                          
     }
 }
 //----------------------------------------------------------
-void mwMain::setStyle()                                                         //заполнение стилей
+void mwMain::setStyle()                                                         // заполнение стилей
 {
     twStyle->clear();
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
@@ -387,7 +387,7 @@ void mwMain::setStyle()                                                         
     }
 }
 //----------------------------------------------------------
-void mwMain::setTrack()                                                         //заполнение треков
+void mwMain::setTrack()                                                         // заполнение треков
 {
     twTrack->clear();
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
@@ -412,7 +412,7 @@ void mwMain::setTrack()                                                         
 //----------------------------------------------------------
 //от лица админа добавление\изменение\удаление исполнителя
 //----------------------------------------------------------
-void mwMain::on_pbAddExec_clicked()                                             //кнопка добавить исполнителя
+void mwMain::on_pbAddExec_clicked()                                             // кнопка "добавить исполнителя"
 {
     dExec *dialog = new dExec(sDBAlias, "", this);
     if(dialog)
@@ -423,7 +423,7 @@ void mwMain::on_pbAddExec_clicked()                                             
     }
 }
 //----------------------------------------------------------
-void mwMain::on_pbEgitExec_clicked()                                            //кнопка изменить исполнителя
+void mwMain::on_pbEgitExec_clicked()                                            // кнопка "изменить исполнителя"
 {
     if(twExec->selectedItems().count())
     {
@@ -433,17 +433,17 @@ void mwMain::on_pbEgitExec_clicked()                                            
             dialog->exec();
             delete dialog;
             setExec();
-            setTrack();                                                         //обновить и треки
+            setTrack();                                                         // обновить треки
         }
     }
 }
-//----------------------------------------------------------                    //даблклик исполнителя
+//----------------------------------------------------------                    // даблклик исполнителя
 void mwMain::on_twExec_itemDoubleClicked(QTreeWidgetItem *, int )
 {
     if(twExec->selectedItems().count())
         pbEgitExec->click();
 }
-//----------------------------------------------------------                    //кнопка удалить исполнителя
+//----------------------------------------------------------                    // кнопка "удалить исполнителя"
 void mwMain::on_pbDelExec_clicked()
 {   if(QMessageBox::question(this, " ", tr("Будут удалены все связанные записи.\nПродолжить удаление?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
     {
@@ -453,14 +453,14 @@ void mwMain::on_pbDelExec_clicked()
             QString sSql = "DELETE FROM executor WHERE ID_executor=%1";
             q.exec(sSql.arg(twExec->selectedItems().at(0)->text(0)));
             setExec();
-            setTrack();                                                         //обновить и треки
+            setTrack();                                                         
         }
     }
 }
 //----------------------------------------------------------
 //от лица админа добавление\изменение\удаление стиля
 //----------------------------------------------------------
-void mwMain::on_pbAddStyle_clicked()                                            //кнопка добавить стиль
+void mwMain::on_pbAddStyle_clicked()                                            // кнопка "добавить стиль"
 {
     dStyle *dialog = new dStyle(sDBAlias, "", this);
     if(dialog)
@@ -471,7 +471,7 @@ void mwMain::on_pbAddStyle_clicked()                                            
     }
 }
 //----------------------------------------------------------
-void mwMain::on_pbEgitStyle_clicked()                                           //кнопка изменить стиль
+void mwMain::on_pbEgitStyle_clicked()                                           // кнопка "изменить стиль"
 {
     if(twStyle->selectedItems().count())
     {
@@ -481,17 +481,17 @@ void mwMain::on_pbEgitStyle_clicked()                                           
             dialog->exec();
             delete dialog;
             setStyle();
-            setTrack();                                                         //обновить и треки
+            setTrack();                                                       
         }
     }
 }
-//----------------------------------------------------------                    //даблклик стиля
+//----------------------------------------------------------                    // даблклик стиля
 void mwMain::on_twStyle_itemDoubleClicked(QTreeWidgetItem *, int )
 {
     if(twStyle->selectedItems().count())
         pbEgitStyle->click();
 }
-//----------------------------------------------------------                    //кнопка удалить стиль
+//----------------------------------------------------------                    // кнопка "удалить стиль"
 void mwMain::on_pbDelStyle_clicked()
 {
     if(QMessageBox::question(this, " ", tr("Будут удалены все связанные записи.\nПродолжить удаление?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)
@@ -501,13 +501,13 @@ void mwMain::on_pbDelStyle_clicked()
             QString sSql = "DELETE FROM styles WHERE ID_style=%1";
             q.exec(sSql.arg(twStyle->selectedItems().at(0)->text(0)));
             setStyle();
-            setTrack();                                                         //обновить и треки
+            setTrack();                                                       
         }
     }
 }
 //----------------------------------------------------------
 //от лица админа добавление\изменение\удаление трека
-//----------------------------------------------------------                    //кнопка добавить трек
+//----------------------------------------------------------                    // кнопка "добавить трек"
 void mwMain::on_pbAddTrack_clicked()
 {
     dTrack *dialog = new dTrack(sDBAlias, "", this);
@@ -518,7 +518,7 @@ void mwMain::on_pbAddTrack_clicked()
         setTrack();
     }
 }
-//----------------------------------------------------------                    //кнопка изменить трек
+//----------------------------------------------------------                    // кнопка "изменить трек"
 void mwMain::on_pbEgitTrack_clicked()
 {
     if(twTrack->selectedItems().count())
@@ -531,13 +531,13 @@ void mwMain::on_pbEgitTrack_clicked()
             setTrack();
         }   }
 }
-//----------------------------------------------------------                    //даблклик трека
+//----------------------------------------------------------                    // даблклик трека
 void mwMain::on_twTrack_itemDoubleClicked(QTreeWidgetItem *, int )
 {
     if(twTrack->selectedItems().count())
         pbEgitTrack->click();
 }
-//----------------------------------------------------------                    //кнопка удалить трек
+//----------------------------------------------------------                    // кнопка "удалить трек"
 void mwMain::on_pbDelTrack_clicked()
 {
     if(QMessageBox::question(this, " ", tr("Запись будет безвозвратно удалена.\nПродолжить удаление?"), QMessageBox::Yes|QMessageBox::No) == QMessageBox::Yes)

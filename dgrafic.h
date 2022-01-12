@@ -8,7 +8,7 @@
 class dGrafic : public QDialog, private Ui::dGrafic
 {
     Q_OBJECT
-    QString sDBAlias;                                                           //<Идентификатор доступа к БД
+    QString sDBAlias;                                                           // Идентификатор доступа к БД
     dGrafic *cv;
 
 public:

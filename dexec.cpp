@@ -2,7 +2,7 @@
 #include <QtSql>
 #include <QMessageBox>
 //----------------------------------------------------------
-dExec::dExec(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)      //выводим всё
+dExec::dExec(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)      // выводим всё
 {
     setupUi(this);
     sDBAlias = ALIAS;
@@ -21,7 +21,7 @@ dExec::dExec(QString ALIAS, QString ID, QWidget *parent) : QDialog(parent)      
     }
 }
 //----------------------------------------------------------
-void dExec::on_pbOk_clicked()                                                   //кнопка Ок
+void dExec::on_pbOk_clicked()                                                   // кнопка "Ок"
 {
    if(leSurname->text().isEmpty())
     {
@@ -30,11 +30,11 @@ void dExec::on_pbOk_clicked()                                                   
         return;
     }
     QSqlQuery q(QSqlDatabase::database(sDBAlias));
-    if(sId.isEmpty())                                                           //добавляем исполнителя
+    if(sId.isEmpty())                                                           // добавляем исполнителя
     {
         QString sSql = "SELECT ID_executor FROM executor WHERE name='%1' AND surname='%2' AND twoname='%3'";
         q.exec(sSql.arg(leName->text()).arg(leSurname->text()).arg(leNametwo->text()));
-        if(q.next())                                                            //если идентичное есть
+        if(q.next())                                                            // если идентичное есть
         {
             QMessageBox::question(this, " ", tr("Такая запись уже есть."), QMessageBox::Ok);
             leName->clear();
@@ -46,13 +46,13 @@ void dExec::on_pbOk_clicked()                                                   
         sSql = "INSERT INTO executor (name, surname, twoname) VALUES ('%1', '%2', '%3')";
         q.exec(sSql.arg(leName->text()).arg(leSurname->text()).arg(leNametwo->text()));
     }
-    else                                                                        //изменяем исполнителя
+    else                                                                        // изменяем исполнителя
     {
         QString sSql = "SELECT ID_executor FROM executor WHERE name='%1' AND surname='%2' AND twoname='%3' AND ID_executor<>%4"; //не мы сами
         q.exec(sSql.arg(leName->text()).arg(leSurname->text()).arg(leNametwo->text()).arg(sId));
         if(q.next())
         {
-            QMessageBox::question(this, " ", tr("Такая запись уже есть."), QMessageBox::Ok); //если идентичное есть
+            QMessageBox::question(this, " ", tr("Такая запись уже есть."), QMessageBox::Ok); // если идентичное есть
             return;
         }
         sSql = "UPDATE executor SET name='%1', surname='%2', twoname='%3' WHERE ID_executor=%4";

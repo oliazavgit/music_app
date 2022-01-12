@@ -6,10 +6,10 @@
 class dTrack : public QDialog, private Ui::dTrack
 {
     Q_OBJECT
-    QString sDBAlias;                                                           //<Идентификатор доступа к БД
-    QString sId;                                                                //<Идентификатор записи
-    QString sIdExec;                                                            //<Идентификатор записи
-    QString sIdStyle;                                                           //<Идентификатор записи
+    QString sDBAlias;                                                           // Идентификатор доступа к БД
+    QString sId;                                                                // Идентификатор записи
+    QString sIdExec;                                                            // Идентификатор записи
+    QString sIdStyle;                                                           // Идентификатор записи
 public:
       explicit dTrack(QString ALIAS, QString ID = "", QWidget *parent = 0);
 private slots:
